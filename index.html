@@ -165,7 +165,7 @@ canvas {
   background: white;
   opacity: 0;
   pointer-events: none;
-  animation: fiveFlashes 1.5s linear forwards;
+  animation: fiveFlashes 0.01s linear forwards;
 }
 
 @keyframes fiveFlashes {
@@ -182,7 +182,8 @@ canvas {
   70%, 76% { opacity: 0; }
 
   80%, 86% { opacity: 1; }
-  90%, 100% { opacity: 0;}}
+  90%, 100% { opacity: 0; }
+}
 
 /* SCANLINES */
 .scanlines {
