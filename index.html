@@ -42,8 +42,11 @@ canvas {
   align-items: center;
   text-align: center;
   padding: 20px;
-  background:
-    radial-gradient(ellipse at center, #16000088, transparent 65%);
+  background: radial-gradient(
+    ellipse at center,
+    #16000088,
+    transparent 65%
+  );
 }
 
 .content {
@@ -154,24 +157,35 @@ canvas {
   to { transform: translateX(-100%); }
 }
 
-/* Kilatan putih singkat setiap 1 detik */
+/* 5 KILATAN SAJA, LALU BERHENTI */
 #flash {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  z-index: 99999;
   background: white;
   opacity: 0;
   pointer-events: none;
-  animation: flash 0,1s infinite;
+  animation: fiveFlashes 1.5s linear forwards;
 }
 
-@keyframes flash {
-  0%, 5% { opacity: 0; }
-  100% { opacity: 1; }
-  9%, 100% { opacity: 0; }
+@keyframes fiveFlashes {
+  0%, 6% { opacity: .22; }
+  10%, 16% { opacity: 0; }
+
+  20%, 26% { opacity: .22; }
+  30%, 36% { opacity: 0; }
+
+  40%, 46% { opacity: .22; }
+  50%, 56% { opacity: 0; }
+
+  60%, 66% { opacity: .22; }
+  70%, 76% { opacity: 0; }
+
+  80%, 86% { opacity: .22; }
+  90%, 100% { opacity: 0; }
 }
 
-/* Garis layar */
+/* SCANLINES */
 .scanlines {
   position: fixed;
   inset: 0;
@@ -185,7 +199,7 @@ canvas {
   );
 }
 
-/* Gangguan warna */
+/* RGB GLITCH */
 .colorGlitch {
   position: fixed;
   inset: 0;
@@ -197,7 +211,7 @@ canvas {
     transparent 35%,
     #0066ff12
   );
-  animation: colorShift 0,5s infinite alternate;
+  animation: colorShift 2s infinite alternate;
 }
 
 @keyframes colorShift {
@@ -206,9 +220,9 @@ canvas {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 4s !important;
-    animation-iteration-count: 1 !important;
+  #flash {
+    animation: none;
+    opacity: 0;
   }
 }
 </style>
@@ -267,19 +281,16 @@ function resizeMatrix() {
 function drawMatrix() {
   ctx.fillStyle = "rgba(0,0,0,0.09)";
   ctx.fillRect(0, 0, width, height);
-
   ctx.font = "14px monospace";
 
   for (let i = 0; i < drops.length; i++) {
     const char = chars[Math.floor(Math.random() * chars.length)];
-
     ctx.fillStyle = Math.random() > .96 ? "#ff3030" : "#00ff66";
     ctx.fillText(char, i * 16, drops[i] * 16);
 
     if (drops[i] * 16 > height && Math.random() > .975) {
       drops[i] = 0;
     }
-
     drops[i]++;
   }
 }
@@ -340,7 +351,7 @@ function drawNoise() {
   nctx.putImageData(img, 0, 0);
 }
 
-/* LOOP */
+/* START */
 resizeMatrix();
 resizeParticles();
 resizeNoise();
