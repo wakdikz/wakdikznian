@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1018">
+<title>wakdikzXfoto — Auto Photo Grid</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1018;--panel:#121b27;--panel2:#172333;--line:#28394d;--text:#eef5fb;--muted:#9aabba;--mint:#69e2ce;--blue:#70a9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#18334a 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.wrap{width:min(1100px,100% - 28px);margin:auto}
+header{padding:25px 0 19px;border-bottom:1px solid #ffffff12}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:43px;height:43px;border-radius:13px;background:linear-gradient(140deg,var(--mint),#4384d8);display:grid;place-items:center;color:#07131b;font-weight:950;font-size:19px;box-shadow:0 8px 28px #69e2ce2c}
+.brandname{font-size:20px;font-weight:850;letter-spacing:-.7px}.brandname span{color:var(--mint)}.tag{font-size:12px;color:var(--muted);margin-top:1px}
+.hero{padding:28px 0 20px}.eyebrow{color:var(--mint);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(27px,5vw,42px);line-height:1.08;letter-spacing:-1.6px;margin:8px 0}.hero h1 span{color:var(--mint)}.hero p{color:var(--muted);max-width:590px;margin:0}
+main{padding-bottom:50px}.layout{display:grid;grid-template-columns: minmax(0,1fr) 300px;gap:15px;align-items:start}
+.panel{background:linear-gradient(160deg,#152130,#101823);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 35px #0002}
+.panel h2{font-size:16px;margin:0 0 4px}.sub{font-size:12px;color:var(--muted);margin:0 0 14px}
+.drop{border:1.5px dashed #49627a;border-radius:15px;background:#0d1722;padding:27px 15px;text-align:center;transition:.2s}
+.drop.drag{border-color:var(--mint);background:#102a2a}.uploadicon{width:43px;height:43px;border-radius:13px;margin:0 auto 10px;display:grid;place-items:center;background:#69e2ce18;color:var(--mint);font-size:23px}
+.drop strong{display:block;font-size:15px}.drop small{display:block;color:var(--muted);margin:5px 0 13px}.primary{background:var(--mint);color:#071916;border:0;border-radius:10px;padding:11px 16px;font-weight:850}.secondary{background:#202f40;color:var(--text);border:1px solid #34485e;border-radius:10px;padding:10px 13px;font-weight:700}
+.fileinput{display:none}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 0 10px;flex-wrap:wrap}.count{font-weight:800}.count span{color:var(--mint)}.smallbtn{border:0;background:transparent;color:#b8c8d8;font-size:12px;text-decoration:underline;padding:5px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(83px,1fr));gap:8px}.thumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#0b1119;border:1px solid #304154}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.thumb b{position:absolute;left:5px;bottom:5px;background:#000b;padding:2px 6px;border-radius:5px;font-size:10px}.empty{color:var(--muted);text-align:center;padding:18px;font-size:13px}
+.side{position:sticky;top:12px}.field{margin:13px 0}.field label{display:flex;justify-content:space-between;gap:8px;color:#c3d0dd;font-size:12px;margin-bottom:6px}.field input[type=number],.field select{width:100%;background:#0c1520;border:1px solid #34475b;border-radius:9px;padding:10px;color:var(--text);outline:none}.field input[type=range]{width:100%;accent-color:var(--mint)}.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.seg button{background:#0d1722;border:1px solid #34475b;color:var(--muted);padding:9px;border-radius:9px;font-size:12px}.seg button.active{border-color:var(--mint);color:var(--mint);background:#69e2ce12}
+.previewhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:17px 0 10px}.previewhead h2{margin:0;font-size:16px}.previewbox{min-height:150px;max-height:600px;overflow:auto;border:1px solid #34475b;border-radius:13px;padding:10px;background-color:#192432;background-image:linear-gradient(45deg,#273648 25%,transparent 25%),linear-gradient(-45deg,#273648 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#273648 75%),linear-gradient(-45deg,transparent 75%,#273648 75%);background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0}
+#preview{display:grid;width:100%;gap:5px}.cell{min-width:0;overflow:hidden;background:transparent;aspect-ratio:1}.cell img{width:100%;height:100%;display:block;object-fit:contain}
+.download{width:100%;margin-top:13px;padding:13px}.note{font-size:11px;color:var(--muted);margin-top:10px}.status{font-size:12px;color:var(--muted);margin-top:9px;min-height:18px}
+footer{border-top:1px solid #ffffff12;padding:18px 0 25px;color:#718296;font-size:11px;text-align:center}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.side{position:static}.hero{padding-top:23px}.panel{padding:13px}}
+</style>
+</head>
+<body>
+<header><div class="wrap brand"><div class="logo">W</div><div><div class="brandname">wakdikz<span>X</span>foto</div><div class="tag">AUTO PHOTO GRID · SUSUN FOTO SEKALI KLIK</div></div></div></header>
+<div class="wrap">
+<section class="hero"><div class="eyebrow">Simple • Fast • Rapi</div><h1>Gabungin banyak foto.<br><span>Otomatis jadi satu.</span></h1><p>Pilih puluhan gambar dari HP, biarkan wakdikzXfoto menyusun grid sesuai jumlah foto. Atur hasilnya, lalu ekspor jadi PNG.</p></section>
+<main><div class="layout">
+<section class="panel">
+<h2>1. Masukkan foto</h2><p class="sub">Pilih beberapa gambar sekaligus dari galeri atau file HP.</p>
+<div class="drop" id="drop"><div class="uploadicon">＋</div><strong>Taruh foto di sini</strong><small>atau pilih gambar dari perangkat kamu</small><button class="primary" id="choose">Pilih banyak foto</button><input class="fileinput" id="files" type="file" accept="image/*" multiple></div>
+<div class="toolbar"><div class="count">Foto dipilih: <span id="count">0</span></div><div><button class="smallbtn" id="sort">Urut nama</button><button class="smallbtn" id="clear">Hapus semua</button></div></div>
+<div id="thumbs" class="thumbs"><div class="empty">Foto yang kamu pilih bakal muncul di sini.</div></div>
+<div class="previewhead"><h2>2. Pratinjau hasil gabungan</h2><span class="tag" id="dimensions">Belum ada foto</span></div>
+<div class="previewbox"><div id="preview"><div class="empty">Preview akan muncul setelah foto dipilih.</div></div></div>
+</section>
+<aside class="panel side">
+<h2>Pengaturan grid</h2><p class="sub">Mode otomatis menyesuaikan kolom dengan jumlah foto.</p>
+<div class="field"><label>Susunan kolom</label><div class="seg"><button id="auto" class="active">Otomatis</button><button id="manual">Manual</button></div></div>
+<div class="field" id="manualField" hidden><label for="cols">Jumlah kolom</label><input id="cols" type="number" min="1" max="20" value="4"></div>
+<div class="field"><label for="tile">Ukuran tiap kotak <span id="tileVal">180 px</span></label><input id="tile" type="range" min="80" max="500" step="10" value="180"></div>
+<div class="field"><label for="gap">Jarak antar foto <span id="gapVal">5 px</span></label><input id="gap" type="range" min="0" max="30" value="5"></div>
+<div class="field"><label for="fit">Tampilan foto</label><select id="fit"><option value="contain">Utuh — tidak terpotong</option><option value="cover">Penuh — memenuhi kotak</option></select></div>
+<div class="field"><label for="bg">Latar belakang</label><select id="bg"><option value="transparent">Transparan</option><option value="#ffffff">Putih</option><option value="#000000">Hitam</option></select></div>
+<div class="field"><label for="scale">Resolusi PNG</label><select id="scale"><option value="2">Tinggi (2×)</option><option value="3">Sangat tinggi (3×)</option><option value="1">Normal (1×)</option></select></div>
+<button class="primary download" id="download" disabled>↓  Ekspor gabungan PNG</button>
+<div class="status" id="status">Pilih foto untuk mulai.</div>
+<div class="note">Catatan: foto diproses langsung di browser perangkat kamu. Tidak diunggah ke server.</div>
+</aside>
+</div></main>
+<footer>wakdikzXfoto · alat susun foto otomatis</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);let photos=[],mode='auto';
+function colsFor(n){if(!n)return 1;return Math.max(1,Math.ceil(Math.sqrt(n*1.15)))}
+function settings(){let n=photos.length;return{cols:mode==='auto'?colsFor(n):Math.max(1,Math.min(20,+$('cols').value||4)),tile:+$('tile').value,gap:+$('gap').value,fit:$('fit').value,bg:$('bg').value,scale:+$('scale').value}}
+function draw(){let s=settings(),n=photos.length,rows=Math.ceil(n/s.cols);$('count').textContent=n;$('tileVal').textContent=s.tile+' px';$('gapVal').textContent=s.gap+' px';$('dimensions').textContent=n?`${s.cols} kolom · ${rows} baris`:'Belum ada foto';
+let thumbs=$('thumbs');thumbs.innerHTML='';if(!n)thumbs.innerHTML='<div class="empty">Foto yang kamu pilih bakal muncul di sini.</div>';
+photos.forEach((p,i)=>{let d=document.createElement('div');d.className='thumb';let im=document.createElement('img');im.src=p.url;let b=document.createElement('b');b.textContent=i+1;d.append(im,b);thumbs.append(d)});
+let pr=$('preview');pr.innerHTML='';if(!n){pr.innerHTML='<div class="empty">Preview akan muncul setelah foto dipilih.</div>'}else{pr.style.gridTemplateColumns=`repeat(${s.cols},minmax(0,1fr))`;pr.style.gap=s.gap+'px';photos.forEach(p=>{let d=document.createElement('div');d.className='cell';d.style.aspectRatio='1';let im=document.createElement('img');im.src=p.url;im.style.objectFit=s.fit;d.append(im);pr.append(d)})}
+$('download').disabled=!n;$('status').textContent=n?`Siap menggabungkan ${n} foto.`:'Pilih foto untuk mulai.'}
+function addFiles(list){[...list].filter(f=>f.type.startsWith('image/')).forEach(f=>photos.push({name:f.name,url:URL.createObjectURL(f),file:f}));draw()}
+$('choose').onclick=()=>$('files').click();$('files').onchange=e=>{addFiles(e.target.files);e.target.value=''};
+$('clear').onclick=()=>{photos.forEach(p=>URL.revokeObjectURL(p.url));photos=[];draw()};
+$('sort').onclick=()=>{photos.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));draw()};
+$('auto').onclick=()=>{mode='auto';$('auto').classList.add('active');$('manual').classList.remove('active');$('manualField').hidden=true;draw()};
+$('manual').onclick=()=>{mode='manual';$('manual').classList.add('active');$('auto').classList.remove('active');$('manualField').hidden=false;draw()};
+['cols','tile','gap','fit','bg','scale'].forEach(id=>$(id).addEventListener('input',draw));
+const drop=$('drop');['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+$('download').onclick=async()=>{if(!photos.length)return;let s=settings(),rows=Math.ceil(photos.length/s.cols),w=s.cols*s.tile+(s.cols-1)*s.gap,h=rows*s.tile+(rows-1)*s.gap,canvas=document.createElement('canvas');canvas.width=w*s.scale;canvas.height=h*s.scale;let c=canvas.getContext('2d');c.scale(s.scale,s.scale);if(s.bg!=='transparent'){c.fillStyle=s.bg;c.fillRect(0,0,w,h)}$('download').disabled=true;$('download').textContent='Memproses foto…';$('status').textContent='Sedang membuat PNG…';try{for(let i=0;i<photos.length;i++){let im=new Image();im.src=photos[i].url;await im.decode();let x=(i%s.cols)*(s.tile+s.gap),y=Math.floor(i/s.cols)*(s.tile+s.gap),r=s.fit==='cover'?Math.max(s.tile/im.naturalWidth,s.tile/im.naturalHeight):Math.min(s.tile/im.naturalWidth,s.tile/im.naturalHeight),dw=im.naturalWidth*r,dh=im.naturalHeight*r;c.save();c.beginPath();c.rect(x,y,s.tile,s.tile);c.clip();c.drawImage(im,x+(s.tile-dw)/2,y+(s.tile-dh)/2,dw,dh);c.restore()}let blob=await new Promise(ok=>canvas.toBlob(ok,'image/png'));if(!blob)throw Error();let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='wakdikzXfoto-gabungan.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);$('status').textContent='Berhasil! File PNG sudah dibuat.'}catch(e){$('status').textContent='Ekspor gagal. Coba kurangi ukuran kotak atau resolusi.'}finally{$('download').disabled=false;$('download').textContent='↓  Ekspor gabungan PNG'}};
+draw();
+</script>
+</body></html>
